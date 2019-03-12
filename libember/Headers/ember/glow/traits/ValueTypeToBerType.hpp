@@ -48,11 +48,59 @@ namespace libember { namespace glow { namespace traits
         }
     };
 
+    /**
+     * Specialization for the unsigned integer type.
+     */
+    template<>
+    struct ValueTypeToBerType<unsigned int>
+    {
+        static ber::Type berType()
+        {
+            return ber::Type::Integer;
+        }
+    };
+
     /** 
      * Specialization for the long type.
      */
     template<>
     struct ValueTypeToBerType<long>
+    {
+        static ber::Type berType()
+        {
+            return ber::Type::Integer;
+        }
+    };
+
+    /**
+     * Specialization for the unsigned long type.
+     */
+    template<>
+    struct ValueTypeToBerType<unsigned long>
+    {
+        static ber::Type berType()
+        {
+            return ber::Type::Integer;
+        }
+    };
+
+    /**
+     * Specialization for the long long type.
+     */
+    template<>
+    struct ValueTypeToBerType<long long>
+    {
+        static ber::Type berType()
+        {
+            return ber::Type::Integer;
+        }
+    };
+
+    /**
+     * Specialization for the unsigned long long type.
+     */
+    template<>
+    struct ValueTypeToBerType<unsigned long long>
     {
         static ber::Type berType()
         {
