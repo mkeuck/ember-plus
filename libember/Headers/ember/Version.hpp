@@ -14,7 +14,7 @@
 
 #define LIBEMBER_VERSION_MAJOR      1
 #define LIBEMBER_VERSION_MINOR      8
-#define LIBEMBER_VERSION_REVISION   0
+#define LIBEMBER_VERSION_REVISION   2
 
 namespace libember
 {
