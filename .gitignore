@@ -3,6 +3,7 @@ bin/*
 obj/*
 .vs
 *.tmp
+*/build/*
 documentation/~$ber+ Documentation.docx
 /libember/.idea/.name
 /libember/.idea/encodings.xml
