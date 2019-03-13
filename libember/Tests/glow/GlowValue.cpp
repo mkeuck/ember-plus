@@ -20,6 +20,44 @@
     
 int main(int, char const* const*)
 {
+    {
+        libember::glow::Value encoding((0xFFFFFFFF));
+        libember::util::OctetStream stream;
+        libember::ber::encodeFrame(stream, encoding.toBerValue());
+        libember::ber::Tag tag = libember::ber::decode<libember::ber::Tag>(stream);
+        libember::ber::Length<int> length = libember::ber::decode<libember::ber::Length<int>>(stream);
+        libember::glow::Value decoding;
+
+        if (length.value > 4)
+        {
+            decoding = libember::ber::decode<long long>(stream, length.value);
+        }
+        else
+        {
+            decoding = libember::ber::decode<long>(stream, length.value);
+        }
+        
+        unsigned int result = static_cast<unsigned int>(decoding.toInteger64());
+
+        if (result != 0xFFFFFFFF)
+        {
+            THROW_TEST_EXCEPTION("Unexpected type.");
+        }
+    }
+
+    {
+        libember::glow::GlowParameter p(1);
+        p.setValue((0xFFFFFFFF));
+
+        libember::glow::Value value = p.value();
+        int length = value.toBerValue().encodedLength();
+        unsigned int result = static_cast<unsigned int>(value.toInteger());
+
+        if (result != 0xFFFFFFFF)
+        {
+            THROW_TEST_EXCEPTION("Unexpected type.");
+        }
+    }
 
     {
         libember::util::OctetStream stream;

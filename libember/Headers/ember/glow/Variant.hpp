@@ -43,6 +43,13 @@ namespace libember { namespace glow
          */
         virtual long toInteger() const = 0;
 
+        /**
+         * Returns the internal value as an 64 bit integer. If the internal type is not an
+         * integer, the implementation will try to convert it.
+         * @return Returns the internal value as integer.
+         */
+        virtual long long toInteger64() const = 0;
+
         /** 
          * Returns the internal value as double. If the internal type is not a
          * double, the implementation will try to convert it.
@@ -114,10 +121,12 @@ namespace libember { namespace glow
     inline Variant::Variant(ParameterType const& type)
         : m_refCount(1)
         , m_type(type)
-    {}
+    {
+    }
 
     inline Variant::~Variant()
-    {}
+    {
+    }
 
     inline ParameterType const& Variant::type() const
     {
@@ -151,6 +160,186 @@ namespace libember { namespace glow
         struct VariantImpl;
 
 
+        template<typename ValueType>
+        struct IntegerVariantImpl : Variant
+        {
+            friend struct Variant;
+
+            typedef ValueType value_type;
+
+            /** Prohibit assignment */
+            IntegerVariantImpl& operator=(IntegerVariantImpl const&);
+
+        public:
+            virtual long toInteger() const
+            {
+                return static_cast<long>(m_value);
+            }
+
+            virtual long long toInteger64() const
+            {
+                return static_cast<long long>(m_value);
+            }
+
+            virtual double toReal() const
+            {
+                return static_cast<double>(m_value);
+            }
+
+            virtual std::string toString() const
+            {
+                std::stringstream stream;
+                stream << m_value;
+
+                return stream.str();
+            }
+
+            virtual ber::Octets toOctets() const
+            {
+                return ber::Octets();
+            }
+
+            virtual bool toBoolean() const
+            {
+                return m_value != 0;
+            }
+
+        protected:
+            /**
+             * Constructor, initializes the variant with a string value.
+             * @param value Value to store.
+             */
+            IntegerVariantImpl(value_type const& value)
+                : Variant(ParameterType::Integer)
+                , m_value(value)
+            {
+            }
+
+        private:
+            value_type const m_value;
+        };
+
+
+        /**
+         * Variant specialization for the int type.
+         */
+        template<>
+        struct VariantImpl<int> : IntegerVariantImpl<int>
+        {
+            friend struct Variant;
+
+        private:
+            /**
+             * Constructor initializing the variant with an integer.
+             * @param value Value to initialize the variant with.
+             */
+            VariantImpl(value_type const& value)
+                : IntegerVariantImpl(value)
+            {
+            }
+        };
+
+
+        /**
+         * Variant specialization for the long type.
+         */
+        template<>
+        struct VariantImpl<long> : IntegerVariantImpl<long>
+        {
+            friend struct Variant;
+
+        private:
+            /**
+             * Constructor initializing the variant with an integer.
+             * @param value Value to initialize the variant with.
+             */
+            VariantImpl(value_type const& value)
+                : IntegerVariantImpl(value)
+            {
+            }
+        };
+
+
+        /**
+         * Variant specialization for the long long type.
+         */
+        template<>
+        struct VariantImpl<long long> : IntegerVariantImpl<long long>
+        {
+            friend struct Variant;
+
+        private:
+            /**
+             * Constructor initializing the variant with an integer.
+             * @param value Value to initialize the variant with.
+             */
+            VariantImpl(value_type const& value)
+                : IntegerVariantImpl(value)
+            {
+            }
+        };
+
+
+        /**
+         * Variant specialization for the unsigned int type.
+         */
+        template<>
+        struct VariantImpl<unsigned int> : IntegerVariantImpl<unsigned int>
+        {
+            friend struct Variant;
+
+        private:
+            /**
+             * Constructor initializing the variant with an integer.
+             * @param value Value to initialize the variant with.
+             */
+            VariantImpl(value_type const& value)
+                : IntegerVariantImpl(value)
+            {
+            }
+        };
+
+
+        /**
+         * Variant specialization for the unsigned long type.
+         */
+        template<>
+        struct VariantImpl<unsigned long> : IntegerVariantImpl<unsigned long>
+        {
+            friend struct Variant;
+
+        private:
+            /**
+             * Constructor initializing the variant with an integer.
+             * @param value Value to initialize the variant with.
+             */
+            VariantImpl(value_type const& value)
+                : IntegerVariantImpl(value)
+            {
+            }
+        };
+
+
+        /**
+         * Variant specialization for the unsigned long long type.
+         */
+        template<>
+        struct VariantImpl<unsigned long long> : IntegerVariantImpl<unsigned long long>
+        {
+            friend struct Variant;
+
+        private:
+            /**
+             * Constructor initializing the variant with an integer.
+             * @param value Value to initialize the variant with.
+             */
+            VariantImpl(value_type const& value)
+                : IntegerVariantImpl(value)
+            {
+            }
+        };
+
+
         /**
          * Variant specialization for the std::string type.
          */
@@ -163,7 +352,16 @@ namespace libember { namespace glow
                 virtual long toInteger() const
                 {
                     std::stringstream stream(m_value);
-                    int integer = 0;
+                    long integer = 0;
+
+                    stream >> integer;
+                    return integer;
+                }
+
+                virtual long long toInteger64() const
+                {
+                    std::stringstream stream(m_value);
+                    long long integer = 0;
 
                     stream >> integer;
                     return integer;
@@ -212,61 +410,6 @@ namespace libember { namespace glow
 
 
         /**
-         * Variant specialization for the integer type.
-         */
-        template<>
-        struct VariantImpl<long> : Variant
-        {
-            friend struct Variant;
-            typedef int value_type;
-            public:
-                virtual long toInteger() const
-                {
-                    return m_value;
-                }
-
-                virtual double toReal() const
-                {
-                    return m_value;
-                }
-
-                virtual std::string toString() const
-                {
-                    std::stringstream stream;
-                    stream << m_value;
-
-                    return stream.str();
-                }
-
-                virtual ber::Octets toOctets() const
-                {
-                    return ber::Octets();
-                }
-
-                virtual bool toBoolean() const
-                {
-                    return m_value != 0;
-                }
-
-            private:
-                /**
-                 * Constructor initializing the variant with an integer.
-                 * @param value Value to initialize the variant with.
-                 */
-                VariantImpl(value_type const& value)
-                    : Variant(ParameterType::Integer)
-                    , m_value(value)
-                {}
-
-                /** Prohibit assignment */
-                VariantImpl& operator=(VariantImpl const&);
-
-            private:
-                value_type const m_value;
-        };
-
-
-        /**
          * Variant specialization for the double type.
          */
         template<>
@@ -278,6 +421,11 @@ namespace libember { namespace glow
                 virtual long toInteger() const
                 {
                     return static_cast<long>(m_value);
+                }
+
+                virtual long long toInteger64() const
+                {
+                    return static_cast<long long>(m_value);
                 }
 
                 virtual double toReal() const
@@ -335,6 +483,11 @@ namespace libember { namespace glow
                     return m_value ? 1 : 0;
                 }
 
+                virtual long long toInteger64() const
+                {
+                    return m_value ? 1 : 0;
+                }
+
                 virtual double toReal() const
                 {
                     return m_value ? 1.0 : 0.0;
@@ -387,6 +540,11 @@ namespace libember { namespace glow
                     return 0;
                 }
 
+                virtual long long toInteger64() const
+                {
+                    return 0;
+                }
+
                 virtual double toReal() const
                 {
                     return 0.0;
@@ -435,6 +593,11 @@ namespace libember { namespace glow
             typedef void* value_type;
             public:
                 virtual long toInteger() const
+                {
+                    return 0;
+                }
+
+                virtual long long toInteger64() const
                 {
                     return 0;
                 }

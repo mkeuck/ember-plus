@@ -106,7 +106,7 @@ namespace libember { namespace dom
 
                     case ber::Type::Integer:
                         if (length() > 4)
-                            return new VariantLeaf(tag, decode<long>());
+                            return new VariantLeaf(tag, decode<long long>());
                         else
                             return new VariantLeaf(tag, decode<int>());
 

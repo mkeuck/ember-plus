@@ -19,6 +19,19 @@ Starting with version 2.0.0 this project adheres to [Semantic Versioning](https:
 ### Fixed
 
 
+
+
+## [1.8.2] - 2019-03-13
+
+### Overview
+Version 1.8.2 of the Ember+ SDK is a maintenance release, adding 64 bit signed integer support
+to the c++ implementation.
+
+
+### Added
+- libember: glow::Value and GlowParameterBase now support 64 bit signed integer values (long long).
+
+
 ## [1.8.0] - 2019-02-14
 
 ### Overview

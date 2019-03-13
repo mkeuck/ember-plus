@@ -41,6 +41,28 @@ namespace libember { namespace glow
             Value(long value);
 
             /**
+             * Initializes a Value instance that contains an integer value.
+             * @param value The value to store.
+             */
+            Value(long long value);
+
+            /**
+             * Initializes a Value instance that contains an unsinged integer value.
+             * Since unsigned types are not defined explicitly in BER, this value is
+             * expanded to a 64 bit value.
+             * @param value The value to store.
+             */
+            Value(unsigned int value);
+
+            /**
+             * Initializes a Value instance that contains an unsinged integer value.
+             * Since unsigned types are not defined explicitly in BER, this value is
+             * expanded to a 64 bit value.
+             * @param value The value to store.
+             */
+            Value(unsigned long value);
+
+            /**
              * Initializes a Value instance that contains an real value.
              * @param value The value to store.
              */
@@ -107,6 +129,13 @@ namespace libember { namespace glow
              * @return The current value as integer
              */
             long toInteger() const;
+
+            /**
+             * Returns the current value as 64 bit integer.
+             * @note If the data type is not an integer, the implementation will try to convert it.
+             * @return The current value as integer
+             */
+            long long toInteger64() const;
 
             /**
              * Returns the current value as double. 
@@ -181,20 +210,32 @@ namespace libember { namespace glow
             switch(type.number())
             {
                 case ber::Type::Integer:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, long(0)));
+                    if (value.encodedLength() > 4)
+                    {
+                        m_value = Variant::create(util::ValueConverter::valueOf(value, long long(0)));
+                    }
+                    else
+                    {
+                        m_value = Variant::create(util::ValueConverter::valueOf(value, long(0)));
+                    }
                     return;
+
                 case ber::Type::Real:
                     m_value = Variant::create(util::ValueConverter::valueOf(value, double(0.0)));
                     return;
+
                 case ber::Type::UTF8String:
                     m_value = Variant::create(util::ValueConverter::valueOf(value, std::string()));
                     return;
+
                 case ber::Type::OctetString:
                     m_value = Variant::create(util::ValueConverter::valueOf(value, ber::Octets()));
                     return;
+
                 case ber::Type::Boolean:
                     m_value = Variant::create(util::ValueConverter::valueOf(value, false));
                     return;
+
                 case ber::Type::Null:
                     m_value = Variant::create<void*>(0);
                     return;
@@ -217,7 +258,7 @@ namespace libember { namespace glow
         switch(type().value())
         {
             case ParameterType::Integer:
-                return ber::Value(toInteger());
+                return ber::Value(toInteger64());
 
             case ParameterType::Real:
                 return ber::Value(toReal());
@@ -245,6 +286,21 @@ namespace libember { namespace glow
     inline Value::Value(long value)
         : m_value(Variant::create(value))
     {}
+
+    inline Value::Value(long long value)
+        : m_value(Variant::create(value))
+    {
+    }
+
+    inline Value::Value(unsigned int value)
+        : m_value(Variant::create(static_cast<long long>(value)))
+    {
+    }
+
+    inline Value::Value(unsigned long value)
+        : m_value(Variant::create(static_cast<long long>(value)))
+    {
+    }
 
     inline Value::Value(std::string const& value)
         : m_value(Variant::create(value))
@@ -274,6 +330,11 @@ namespace libember { namespace glow
     inline ParameterType Value::type() const
     {
         return m_value->type();
+    }
+
+    inline long long Value::toInteger64() const
+    {
+        return m_value->toInteger64();
     }
 
     inline long Value::toInteger() const

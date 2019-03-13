@@ -154,6 +154,12 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
+    void GlowParameterBase::setValue(long long value)
+    {
+        contents().set(GlowTags::ParameterContents::Value(), value);
+    }
+
+    LIBEMBER_INLINE
     void GlowParameterBase::setValue(std::string const& value)
     {
         contents().set(GlowTags::ParameterContents::Value(), value);

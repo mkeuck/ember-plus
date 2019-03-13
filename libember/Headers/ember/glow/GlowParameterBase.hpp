@@ -233,6 +233,30 @@ namespace libember { namespace glow
 
             /**
              * Sets the value of this parameter.
+             * @param value Parameter value, as integer.
+             * @note The integer type must also be used when the parameter contains an enumeration.
+             *      The value then contains the index of the enumeration entries.
+             */
+            void setValue(long long value);
+
+            /**
+             * Sets the value of this parameter.
+             * @param value Parameter value, as unsigned integer, which is expanded to a 64 bit value.
+             * @note The integer type must also be used when the parameter contains an enumeration.
+             *      The value then contains the index of the enumeration entries.
+             */
+            void setValue(unsigned int value);
+
+            /**
+             * Sets the value of this parameter.
+             * @param value Parameter value, as unsigned integer, which is expanded to a 64 bit value.
+             * @note The integer type must also be used when the parameter contains an enumeration.
+             *      The value then contains the index of the enumeration entries.
+             */
+            void setValue(unsigned long value);
+
+            /**
+             * Sets the value of this parameter.
              * @param value Parameter value, as string.
              */
             void setValue(std::string const& value);
@@ -519,6 +543,16 @@ namespace libember { namespace glow
     inline void GlowParameterBase::setValue(int value)
     {
         setValue(long(value));
+    }
+
+    inline void GlowParameterBase::setValue(unsigned int value)
+    {
+        setValue(static_cast<long long>(value));
+    }
+
+    inline void GlowParameterBase::setValue(unsigned long value)
+    {
+        setValue(static_cast<long long>(value));
     }
 
     inline void GlowParameterBase::setDefault(int value)

@@ -16,6 +16,44 @@
 
 namespace libember { namespace glow { namespace util
 {   
+    namespace detail
+    {
+        template<typename T>
+        struct IntegerValueConverterTraits
+        {
+            typedef T value_type;
+
+            static value_type valueOf(ber::Value const& value, value_type const& default_)
+            {
+                if (value.typeId() == typeid(int))
+                {
+                    return static_cast<value_type>(value.as<int>());
+                }
+                else if (value.typeId() == typeid(unsigned int))
+                {
+                    return static_cast<value_type>(value.as<unsigned int>());
+                }
+                else if (value.typeId() == typeid(long))
+                {
+                    return static_cast<value_type>(value.as<long>());
+                }
+                else if (value.typeId() == typeid(unsigned long))
+                {
+                    return static_cast<value_type>(value.as<unsigned long>());
+                }
+                else if (value.typeId() == typeid(long long))
+                {
+                    return static_cast<value_type>(value.as<long long>());
+                }
+                else if (value.typeId() == typeid(unsigned long long))
+                {
+                    return static_cast<value_type>(value.as<unsigned long long>());
+                }
+
+                return default_;
+            }
+        };
+    }
 
     /**
      * Default implementation for a value converter.
@@ -32,84 +70,57 @@ namespace libember { namespace glow { namespace util
     };
 
     /**
-     * This specialization checks whether the leaf contains an int or long value and
-     * safely converts it.
+     * This specialization checks whether the leaf contains an integer value and
+     * safely converts it to the int type.
      */
     template<>
-    struct ValueConverterTraits<int>
+    struct ValueConverterTraits<int> : detail::IntegerValueConverterTraits<int>
     {
-        typedef int value_type;
-
-        static value_type valueOf(ber::Value const& value, value_type const& default_)
-        {
-            if (value.typeId() == typeid(int))
-            {
-                return value.as<int>();
-            }
-            else if (value.typeId() == typeid(long))
-            {
-                return static_cast<value_type>(value.as<long>());
-            }
-            else if (value.typeId() == typeid(long long))
-            {
-                return static_cast<value_type>(value.as<long long>());
-            }
-            return default_;
-        }
     };
 
     /**
-     * This specialization checks whether the leaf contains an int or long value and
-     * safely converts it.
+     * This specialization checks whether the leaf contains an integer value and
+     * safely converts it to the long type.
      */
     template<>
-    struct ValueConverterTraits<long>
+    struct ValueConverterTraits<long> : detail::IntegerValueConverterTraits<long>
     {
-        typedef long value_type;
-
-        static value_type valueOf(ber::Value const& value, value_type const& default_)
-        {
-            if (value.typeId() == typeid(int))
-            {
-                return value.as<int>();
-            }
-            else if (value.typeId() == typeid(long))
-            {
-                return value.as<long>();
-            }
-            else if (value.typeId() == typeid(long long))
-            {
-                return static_cast<value_type>(value.as<long long>());
-            }
-            return default_;
-        }
     };
 
     /**
-     * This specialization checks whether the leaf contains an int or long value and
-     * safely converts it.
+     * This specialization checks whether the leaf contains an integer value and
+     * safely converts it to the long long type.
      */
     template<>
-    struct ValueConverterTraits<long long>
+    struct ValueConverterTraits<long long> : detail::IntegerValueConverterTraits<long long>
     {
-        typedef long long value_type;
+    };
 
-        static value_type valueOf(ber::Value const& value, value_type const& default_)
-        {
-            if (value.typeId() == typeid(int))
-            {
-                return value.as<int>();
-            }
-            else if (value.typeId() == typeid(long))
-            {
-                return value.as<long>();
-            }
-            else if (value.typeId() == typeid(long long))
-            {
-                return value.as<long long>();
-            }
-            return default_;
-        }
+    /**
+     * This specialization checks whether the leaf contains an integer value and
+     * safely converts it to the unsigned int type.
+     */
+    template<>
+    struct ValueConverterTraits<unsigned int> : detail::IntegerValueConverterTraits<unsigned int>
+    {
+    };
+
+    /**
+     * This specialization checks whether the leaf contains an integer value and
+     * safely converts it to the unsigned long type.
+     */
+    template<>
+    struct ValueConverterTraits<unsigned long> : detail::IntegerValueConverterTraits<unsigned long>
+    {
+    };
+
+    /**
+     * This specialization checks whether the leaf contains an integer value and
+     * safely converts it to the unsigned long long type.
+     */
+    template<>
+    struct ValueConverterTraits<unsigned long long> : detail::IntegerValueConverterTraits<unsigned long long>
+    {
     };
 
     /**
