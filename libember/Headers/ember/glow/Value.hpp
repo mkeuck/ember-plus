@@ -212,11 +212,11 @@ namespace libember { namespace glow
                 case ber::Type::Integer:
                     if (value.encodedLength() > 4)
                     {
-                        m_value = Variant::create(util::ValueConverter::valueOf(value, long long(0)));
+                        m_value = Variant::create(util::ValueConverter::valueOf(value, static_cast<long long>(0)));
                     }
                     else
                     {
-                        m_value = Variant::create(util::ValueConverter::valueOf(value, long(0)));
+                        m_value = Variant::create(util::ValueConverter::valueOf(value, static_cast<int>(0)));
                     }
                     return;
 
