@@ -127,6 +127,27 @@ namespace libember { namespace glow
             void setMinimum(long minimum);
 
             /**
+             * Sets the smallest value allowed for this parameter.
+             * @param minimum Smallest value allowed, as integer.
+             * @note The minimum should be provided in the same type like the value.
+             */
+            void setMinimum(long long minimum);
+
+            /**
+             * Sets the smallest value allowed for this parameter.
+             * @param minimum Smallest value allowed, as integer.
+             * @note The minimum should be provided in the same type like the value.
+             */
+            void setMinimum(unsigned long minimum);
+
+            /**
+             * Sets the smallest value allowed for this parameter.
+             * @param minimum Smallest value allowed, as integer.
+             * @note The minimum should be provided in the same type like the value.
+             */
+            void setMinimum(unsigned int minimum);
+
+            /**
              * Sets the biggest value allowed for this parameter.
              * @param maximum Biggest value allowed, as double.
              * @note The maximum should be provided in the same type like the value.
@@ -146,6 +167,27 @@ namespace libember { namespace glow
              * @note The maximum should be provided in the same type like the value.
              */
             void setMaximum(long maximum);
+
+            /**
+             * Sets the biggest value allowed for this parameter.
+             * @param maximum Biggest value allowed, as integer.
+             * @note The maximum should be provided in the same type like the value.
+             */
+            void setMaximum(long long maximum);
+
+            /**
+             * Sets the biggest value allowed for this parameter.
+             * @param maximum Biggest value allowed, as integer.
+             * @note The maximum should be provided in the same type like the value.
+             */
+            void setMaximum(unsigned int maximum);
+
+            /**
+             * Sets the biggest value allowed for this parameter.
+             * @param maximum Biggest value allowed, as integer.
+             * @note The maximum should be provided in the same type like the value.
+             */
+            void setMaximum(unsigned long maximum);
 
             /**
              * Sets the factor the value has to be divided by when being displayed.
@@ -180,6 +222,24 @@ namespace libember { namespace glow
              * @param value default value.
              */
             void setDefault(long value);
+
+            /**
+             * Sets the default value.
+             * @param value default value.
+             */
+            void setDefault(long long value);
+
+            /**
+             * Sets the default value.
+             * @param value default value.
+             */
+            void setDefault(unsigned int value);
+
+            /**
+             * Sets the default value.
+             * @param value default value.
+             */
+            void setDefault(unsigned long value);
 
             /**
              * Sets the default value.
@@ -535,9 +595,29 @@ namespace libember { namespace glow
         setMaximum(long(maximum));
     }
 
+    inline void GlowParameterBase::setMaximum(unsigned int maximum)
+    {
+        setMaximum(static_cast<long long>(maximum));
+    }
+
+    inline void GlowParameterBase::setMaximum(unsigned long maximum)
+    {
+        setMaximum(static_cast<long long>(maximum));
+    }
+
     inline void GlowParameterBase::setMinimum(int minimum)
     {
         setMinimum(long(minimum));
+    }
+
+    inline void GlowParameterBase::setMinimum(unsigned long minimum)
+    {
+        setMinimum(static_cast<long long>(minimum));
+    }
+
+    inline void GlowParameterBase::setMinimum(unsigned int minimum)
+    {
+        setMinimum(static_cast<long long>(minimum));
     }
 
     inline void GlowParameterBase::setValue(int value)
@@ -558,6 +638,16 @@ namespace libember { namespace glow
     inline void GlowParameterBase::setDefault(int value)
     {
         setDefault(long(value));
+    }
+
+    inline void GlowParameterBase::setDefault(unsigned int value)
+    {
+        setDefault(static_cast<long long>(value));
+    }
+
+    inline void GlowParameterBase::setDefault(unsigned long value)
+    {
+        setDefault(static_cast<long long>(value));
     }
 
     inline bool GlowParameterBase::compliesWithSchema(std::string const& schemaIdentifier) const

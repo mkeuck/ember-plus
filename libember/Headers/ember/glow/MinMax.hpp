@@ -34,6 +34,24 @@ namespace libember { namespace glow
             MinMax(long value);
 
             /**
+             * Initialzes an integer value.
+             * @param value Value to store.
+             */
+            MinMax(long long value);
+
+            /**
+             * Initialzes an integer value.
+             * @param value Value to store.
+             */
+            MinMax(unsigned int value);
+
+            /**
+             * Initialzes an integer value.
+             * @param value Value to store.
+             */
+            MinMax(unsigned long value);
+
+            /**
              * Initialzes a real value.
              * @param value Value to store.
              */
@@ -67,6 +85,12 @@ namespace libember { namespace glow
              * @return The current value as integer.
              */
             long toInteger() const;
+
+            /**
+             * Returns the current value as 64 bit integer.
+             * @return The current value as 64 bit integer.
+             */
+            long long toInteger64() const;
 
             /**
              * Returns the current value as real.
@@ -112,11 +136,20 @@ namespace libember { namespace glow
             switch(type.number())
             {
                 case ber::Type::Integer:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, long(0)));
+                    if (value.encodedLength() > 4)
+                    {
+                        m_value = Variant::create(util::ValueConverter::valueOf(value, static_cast<long long>(0)));
+                    }
+                    else
+                    {
+                        m_value = Variant::create(util::ValueConverter::valueOf(value, static_cast<int>(0)));
+                    }
                     return;
+
                 case ber::Type::Real:
                     m_value = Variant::create(util::ValueConverter::valueOf(value, double(0.0)));
                     return;
+
                 case ber::Type::Null:
                     m_value = Variant::create<void*>(0);
                     return;
@@ -137,6 +170,18 @@ namespace libember { namespace glow
         : m_value(Variant::create(value))
     {}
 
+    inline MinMax::MinMax(long long value)
+        : m_value(Variant::create(value))
+    {}
+
+    inline MinMax::MinMax(unsigned long value)
+        : m_value(Variant::create(value))
+    {}
+
+    inline MinMax::MinMax(unsigned int value)
+        : m_value(Variant::create(value))
+    {}
+
     inline MinMax::MinMax(const MinMax &other)
         : m_value(other.m_value->addRef())
     {}
@@ -149,6 +194,11 @@ namespace libember { namespace glow
     inline long MinMax::toInteger() const
     {
         return m_value->toInteger();
+    }
+
+    inline long long MinMax::toInteger64() const
+    {
+        return m_value->toInteger64();
     }
 
     inline double MinMax::toReal() const

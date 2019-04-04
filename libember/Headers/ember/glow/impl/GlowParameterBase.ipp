@@ -88,6 +88,12 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
+    void GlowParameterBase::setMinimum(long long minimum)
+    {
+        contents().set(GlowTags::ParameterContents::Minimum(), minimum);
+    }
+
+    LIBEMBER_INLINE
     void GlowParameterBase::setMaximum(double maximum)
     {
         contents().set(GlowTags::ParameterContents::Maximum(), maximum);
@@ -95,6 +101,12 @@ namespace libember { namespace glow
 
     LIBEMBER_INLINE
     void GlowParameterBase::setMaximum(long maximum)
+    {
+        contents().set(GlowTags::ParameterContents::Maximum(), maximum);
+    }
+
+    LIBEMBER_INLINE
+    void GlowParameterBase::setMaximum(long long maximum)
     {
         contents().set(GlowTags::ParameterContents::Maximum(), maximum);
     }
@@ -113,6 +125,12 @@ namespace libember { namespace glow
 
     LIBEMBER_INLINE
     void GlowParameterBase::setDefault(long value)
+    {
+        contents().set(GlowTags::ParameterContents::Default(), value);
+    }
+
+    LIBEMBER_INLINE
+    void GlowParameterBase::setDefault(long long value)
     {
         contents().set(GlowTags::ParameterContents::Default(), value);
     }
